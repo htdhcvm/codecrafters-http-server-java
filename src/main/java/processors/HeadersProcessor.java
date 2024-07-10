@@ -11,8 +11,10 @@ public class HeadersProcessor implements Processor {
     }
 
     @Override
-    public void process(String line) throws IOException {
+    public String process(String line) throws IOException {
         String[] headers = line.split(",");
+
+        StringBuilder response = new StringBuilder();
 
         for (String header : headers) {
             String[] keyValue = header.trim().split(": ");
@@ -20,10 +22,12 @@ public class HeadersProcessor implements Processor {
             String key = keyValue[0];
             String value = keyValue[1];
 
+            System.out.println(key);
             if(key.equals("User-Agent")) {
-                String response = String.format("Content-Length: %d\r\n\r\n%s", value.length(), value);
-                clientSocket.getOutputStream().write(response.getBytes());
+                response.append(String.format("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %s\r\n\r\n%s\r\n", value.length(), value));
             }
         }
+
+        return response.toString();
     }
 }
