@@ -1,47 +1,36 @@
+import processors.HeadersProcessor;
+import processors.Processor;
+import processors.UrlProcessor;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.Map;
 
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Logs from your program will appear here!");
+    public static void main(String[] args) throws IOException {
+        Server server = new Server(4221);
+        Socket clientSocket = server.accept();
 
+        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-        ServerSocket serverSocket = null;
-        Socket clientSocket = null;
+        Map<Integer, Processor> map = Map.of(0, new UrlProcessor(clientSocket), 3, new HeadersProcessor(clientSocket));
 
-        try {
-            serverSocket = new ServerSocket(4221);
-            serverSocket.setReuseAddress(true);
-            clientSocket = serverSocket.accept(); // Wait for connection from client.
-            System.out.println("accepted new connection");
+        String line = in.readLine();
+        int i = 0;
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+        while (!line.isEmpty()) {
+            System.out.println("line = " + line);
 
-            String line = in.readLine();
-
-            String[] partsLine = line.split(" ");
-            System.out.println(Arrays.toString(partsLine));
-
-            String path = partsLine[1];
-
-            String[] split = path.substring(1).split("/");
-
-            if (path.equals("/")) {
-                clientSocket.getOutputStream().write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+            if (map.containsKey(i)) {
+                map.get(i).process(line);
             }
-            else if (split[0].equals("echo") && split.length == 2) {
-                String param = split[1];
-                String response = String.format("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %d\r\n\r\n%s", param.length(), param);
-                System.out.println(response);
-                clientSocket.getOutputStream().write(response.getBytes());
-            } else {
-                clientSocket.getOutputStream().write("HTTP/1.1 404 Not Found\r\n\r\n".getBytes());
-            }
-        } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
+
+            line = in.readLine();
+            i++;
         }
     }
 }
+
+
