@@ -1,10 +1,10 @@
-[![progress-banner](https://backend.codecrafters.io/progress/http-server/95e74714-c1b1-4b26-8c82-9aa9c159e540)](https://app.codecrafters.io/users/codecrafters-bot?r=2qF)
+[![progress-banner](https://backend.codecrafters.io/progress/http-simpleServer/95e74714-c1b1-4b26-8c82-9aa9c159e540)](https://app.codecrafters.io/users/codecrafters-bot?r=2qF)
 
 This is a starting point for Java solutions to the
-["Build Your Own HTTP server" Challenge](https://app.codecrafters.io/courses/http-server/overview).
+["Build Your Own HTTP simpleServer" Challenge](https://app.codecrafters.io/courses/http-simpleServer/overview).
 
 [HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) is the
-protocol that powers the web. In this challenge, you'll build a HTTP/1.1 server
+protocol that powers the web. In this challenge, you'll build a HTTP/1.1 simpleServer
 that is capable of serving multiple clients.
 
 Along the way you'll learn about TCP servers,
@@ -16,7 +16,7 @@ and more.
 
 # Passing the first stage
 
-The entry point for your HTTP server implementation is in
+The entry point for your HTTP simpleServer implementation is in
 `src/main/java/Main.java`. Study and uncomment the relevant code, and push your
 changes to pass the first stage:
 
