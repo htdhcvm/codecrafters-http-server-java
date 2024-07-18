@@ -5,7 +5,6 @@ import io.codecrafters.common.Request;
 import io.codecrafters.common.Response;
 
 import java.io.*;
-import java.util.Arrays;
 
 public class Handler {
 

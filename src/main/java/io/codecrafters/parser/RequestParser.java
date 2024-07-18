@@ -23,8 +23,6 @@ public class RequestParser implements Parser<Request, BufferedReader> {
 
         var request = requestBuilder.build();
 
-        logger.log(Level.INFO, "Request: {0}", request);
-
         return request;
     }
 
