@@ -1,3 +1,6 @@
+package io.codecrafters.server;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,6 +30,10 @@ public class FileServer implements Server {
     public void start() throws IOException {
         System.out.printf("Server listening port: %s%n", port);
         serverSocket.setReuseAddress(true);
+
+        File file = new File(directory.substring(1));
+
+        if(!file.exists()) file.mkdirs();
 
         while(true) {
             Socket clientSocket = serverSocket.accept();

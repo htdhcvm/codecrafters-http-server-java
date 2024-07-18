@@ -1,3 +1,5 @@
+package io.codecrafters.common;
+
 public enum CliParamsEnum {
     FILE_DIRECTORY("fileDirectory");
 

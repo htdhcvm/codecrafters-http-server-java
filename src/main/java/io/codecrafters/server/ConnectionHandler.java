@@ -1,8 +1,14 @@
+package io.codecrafters.server;
+
+import io.codecrafters.common.Request;
+import io.codecrafters.common.Response;
+import io.codecrafters.parser.RequestParser;
+
 import java.io.*;
 import java.net.Socket;
 
 public class ConnectionHandler implements Runnable {
-    private final HttpParser httpParser;
+    private final RequestParser requestParser;
 
     private final Handler handler;
 
@@ -11,14 +17,14 @@ public class ConnectionHandler implements Runnable {
     private String directory;
 
     public ConnectionHandler(Socket clientSocket) {
-        this.httpParser = new HttpParser();
+        this.requestParser = new RequestParser();
         this.handler = new Handler();
         this.clientSocket = clientSocket;
     }
 
 
     public ConnectionHandler(Socket clientSocket, String directory) {
-        this.httpParser = new HttpParser();
+        this.requestParser = new RequestParser();
         this.handler = new Handler();
         this.clientSocket = clientSocket;
         this.directory = directory;
@@ -32,7 +38,7 @@ public class ConnectionHandler implements Runnable {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
 
-            Request request = httpParser.parse(in);
+            Request request = requestParser.parse(in);
             Response response = handler.handle(request, directory);
 
             outputStream.write(response.getMessageBytes());

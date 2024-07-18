@@ -1,3 +1,7 @@
+package io.codecrafters.parser;
+
+import io.codecrafters.common.CliParamsEnum;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

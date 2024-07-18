@@ -1,8 +1,13 @@
+package io.codecrafters.server;
+
+import io.codecrafters.common.Method;
+import io.codecrafters.common.Request;
+import io.codecrafters.common.Response;
+
 import java.io.*;
+import java.util.Arrays;
 
 public class Handler {
-
-    private static final String pathToFilesDirectory = "/home/nikita/Desktop/apps/codecrafters-http-server-java/tmp";
 
     public static final String CRLF = "\r\n";
 
@@ -23,8 +28,8 @@ public class Handler {
             return new Response(String.format("HTTP/1.1 200 OK%sContent-Type: text/plain%sContent-Length: %s%s%s%s", CRLF, CRLF, userAgent.length(), CRLF, CRLF, userAgent));
         }
 
-        if (request.getPath().startsWith("/files")) {
-            if(directory == null) {
+        if (request.getMethod().equals(Method.GET) && request.getPath().startsWith("/files")) {
+            if (directory == null) {
                 return new Response(String.format("HTTP/1.1 404 Not Found%s%s", CRLF, CRLF));
             }
 
@@ -54,8 +59,22 @@ public class Handler {
             return new Response(String.format("HTTP/1.1 200 OK%sContent-Type: application/octet-stream%sContent-Length: %s%s%s%s", CRLF, CRLF, size, CRLF, CRLF, content));
         }
 
+        if (request.getMethod().equals(Method.POST) && request.getPath().startsWith("/files")) {
+            String fileName = directory.substring(1) + "/" + request.getPath().substring(1).split("/")[1];
+            String body = request.getBody();
+            File file = new File(fileName);
+
+            if (file.createNewFile()) {
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(body.trim());
+                fileWriter.close();
+            }
+
+
+            return new Response(String.format("HTTP/1.1 201 Created%s%s", CRLF, CRLF));
+        }
+
 
         return new Response(String.format("HTTP/1.1 404 Not Found%s%s", CRLF, CRLF));
     }
-
 }

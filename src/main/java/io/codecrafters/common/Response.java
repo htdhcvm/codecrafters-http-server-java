@@ -1,3 +1,5 @@
+package io.codecrafters.common;
+
 public class Response {
 
     private String message;
@@ -12,7 +14,7 @@ public class Response {
 
     @Override
     public String toString() {
-        return "Response{" +
+        return "io.codecrafters.common.Response{" +
                 "message='" + message + '\'' +
                 '}';
     }
