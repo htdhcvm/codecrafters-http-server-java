@@ -31,7 +31,9 @@ public class FileServer implements Server {
         System.out.printf("Server listening port: %s%n", port);
         serverSocket.setReuseAddress(true);
 
-        File file = new File(directory.substring(1));
+
+        System.out.println("Create directory: " + directory);
+        File file = new File(directory);
 
         if(!file.exists()) file.mkdirs();
 

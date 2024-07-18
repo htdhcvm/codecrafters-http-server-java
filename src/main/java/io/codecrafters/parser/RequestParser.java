@@ -23,6 +23,8 @@ public class RequestParser implements Parser<Request, BufferedReader> {
 
         var request = requestBuilder.build();
 
+        logger.log(Level.INFO, "Request: {0}", request);
+
         return request;
     }
 
@@ -71,10 +73,9 @@ public class RequestParser implements Parser<Request, BufferedReader> {
 
     private void requestBody(Request.RequestBuilder requestBuilder, BufferedReader in) throws IOException {
         StringBuilder body = new StringBuilder();
-        char[] buffer = new char[1024];
 
         while (in.ready()) {
-            body.append(buffer, 0, in.read());
+            body.append((char) in.read());
         }
 
         requestBuilder.body(body.toString());

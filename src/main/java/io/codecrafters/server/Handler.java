@@ -59,20 +59,20 @@ public class Handler {
         }
 
         if (request.getMethod().equals(Method.POST) && request.getPath().startsWith("/files")) {
-            String fileName = directory.substring(1) + "/" + request.getPath().substring(1).split("/")[1];
+            String fileName = directory + request.getPath().substring(1).split("/")[1];
             String body = request.getBody();
+
+            System.out.println("fileName = " + fileName);
             File file = new File(fileName);
 
             if (file.createNewFile()) {
                 FileWriter fileWriter = new FileWriter(file);
-                fileWriter.write(body.trim());
+                fileWriter.write(body);
                 fileWriter.close();
             }
 
-
             return new Response(String.format("HTTP/1.1 201 Created%s%s", CRLF, CRLF));
         }
-
 
         return new Response(String.format("HTTP/1.1 404 Not Found%s%s", CRLF, CRLF));
     }
