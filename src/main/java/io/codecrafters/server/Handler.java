@@ -1,5 +1,6 @@
 package io.codecrafters.server;
 
+import io.codecrafters.common.EncodingHeaders;
 import io.codecrafters.common.Method;
 import io.codecrafters.common.Request;
 import io.codecrafters.common.Response;
@@ -15,8 +16,15 @@ public class Handler {
             return new Response(String.format("HTTP/1.1 200 OK%s%s", CRLF, CRLF));
         }
 
-        if (request.getPath().startsWith("/echo")) {
+        if (request.getPath().startsWith("/echo") && request.getPath().substring(1).split("/").length > 1) {
             String param = request.getPath().substring(1).split("/")[1];
+            String encodingKey = "Accept-Encoding";
+
+            if (request.getHeaders().containsKey(encodingKey) && EncodingHeaders.containsByValue(request.getHeaders().get(encodingKey))) {
+                String encodingValue = request.getHeaders().get(encodingKey);
+
+                return new Response(String.format("HTTP/1.1 200 OK%sContent-Type: text/plain%sContent-Encoding: %s%s%s", CRLF, CRLF, encodingValue, CRLF, CRLF));
+            }
 
             return new Response(String.format("HTTP/1.1 200 OK%sContent-Type: text/plain%sContent-Length: %d%s%s%s", CRLF, CRLF, param.length(), CRLF, CRLF, param));
         }
