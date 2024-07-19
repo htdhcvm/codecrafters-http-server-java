@@ -6,6 +6,8 @@ import io.codecrafters.common.Request;
 import io.codecrafters.common.Response;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class Handler {
 
@@ -20,12 +22,27 @@ public class Handler {
             String param = request.getPath().substring(1).split("/")[1];
             String encodingKey = "Accept-Encoding";
 
-            if (request.getHeaders().containsKey(encodingKey) && EncodingHeaders.containsByValue(request.getHeaders().get(encodingKey))) {
+            if (request.getHeaders().containsKey(encodingKey)) {
                 String encodingValue = request.getHeaders().get(encodingKey);
 
-                return new Response(String.format("HTTP/1.1 200 OK%sContent-Type: text/plain%sContent-Encoding: %s%s%s", CRLF, CRLF, encodingValue, CRLF, CRLF));
-            }
+                List<String> list = Arrays
+                        .stream(encodingValue.split(","))
+                        .map(String::trim)
+                        .filter(EncodingHeaders::containsByValue)
+                        .toList();
 
+                if (!list.isEmpty()) {
+                    return new Response(String.format(
+                            "HTTP/1.1 200 OK%sContent-Type: text/plain%sContent-Encoding: %s%s%s",
+                            CRLF,
+                            CRLF,
+                            String.join(", ", list),
+                            CRLF,
+                            CRLF
+                    ));
+                }
+
+            }
             return new Response(String.format("HTTP/1.1 200 OK%sContent-Type: text/plain%sContent-Length: %d%s%s%s", CRLF, CRLF, param.length(), CRLF, CRLF, param));
         }
 
