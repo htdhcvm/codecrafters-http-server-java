@@ -1,25 +1,25 @@
 package io.codecrafters.common;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import lombok.Builder;
+import lombok.Getter;
+
+@Builder
+@Getter
 public class Response {
+    private String headers;
 
-    private String message;
-
-    public Response(String message) {
-        this.message = message;
-    }
-
-    public String getMessage() {
-        return this.message;
-    }
+    private String bodyString;
+    private byte[] bodyByte;
 
     @Override
     public String toString() {
-        return "io.codecrafters.common.Response{" +
-                "message='" + message + '\'' +
-                '}';
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(this);
     }
 
-    public byte[] getMessageBytes() {
-        return this.message.getBytes();
+    public byte[] getHeadersBytes() {
+        return this.headers.getBytes();
     }
 }

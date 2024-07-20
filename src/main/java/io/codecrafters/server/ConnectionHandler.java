@@ -41,7 +41,11 @@ public class ConnectionHandler implements Runnable {
             Request request = requestParser.parse(in);
             Response response = handler.handle(request, directory);
 
-            outputStream.write(response.getMessageBytes());
+            outputStream.write(response.getHeadersBytes());
+
+            if(response.getBodyByte().length > 0) {
+                outputStream.write(response.getBodyByte());
+            }
 
             in.close();
             clientSocket.close();
